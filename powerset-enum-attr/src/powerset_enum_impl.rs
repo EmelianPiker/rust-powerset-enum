@@ -305,6 +305,7 @@ fn gen_powerset_macro(
     let empty_powerset_generics = replaced_variants.iter().map(|_| make_never());
     let empty_powerset = quote!(#enum_ident<#(#empty_powerset_generics),*>);
     Ok(quote! {
+        #[macro_export]
         macro_rules! #enum_ident {
             ($($tt:ty),*) => { powerset_enum::powerset!(#empty_powerset, $($tt),*) };
             ($($tt:ty),*,) => { powerset_enum::powerset!(#empty_powerset, $($tt),*) };
