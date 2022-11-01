@@ -2,6 +2,7 @@ use proc_macro2::TokenStream;
 
 use quote::quote;
 use syn::parse::Error;
+use syn::Ident;
 
 pub fn powerset_enum_impl(mut input: syn::ItemEnum) -> Result<TokenStream, Error> {
     if !input.generics.params.is_empty() {
@@ -10,6 +11,8 @@ pub fn powerset_enum_impl(mut input: syn::ItemEnum) -> Result<TokenStream, Error
             "powerset-enum does not support generics",
         ));
     }
+
+    let ident_fix = Ident::new(&( "_".to_owned() + &input.ident.to_string() ), input.ident.span());
 
     let mut replaced_variants = Vec::new();
 
