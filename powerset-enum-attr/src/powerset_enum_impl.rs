@@ -66,6 +66,7 @@ pub fn powerset_enum_impl(mut input: syn::ItemEnum) -> Result<TokenStream, Error
     let without_trait_impls = gen_without_trait_impls(&input.ident, &replaced_variants)?;
     let methods_on_enum_impl = gen_methods_on_enum_impl(&input.ident, &replaced_variants)?;
     let powerset_macro = gen_powerset_macro(&input.ident, &replaced_variants)?;
+    let powerset_macro2 = gen_powerset_macro(&ident_fix, &replaced_variants)?;
 
     Ok(quote! {
         #input
@@ -75,6 +76,7 @@ pub fn powerset_enum_impl(mut input: syn::ItemEnum) -> Result<TokenStream, Error
         #without_trait_impls
         #methods_on_enum_impl
         #powerset_macro
+        #powerset_macro2
     })
 }
 
