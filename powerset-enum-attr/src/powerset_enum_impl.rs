@@ -66,8 +66,8 @@ pub fn powerset_enum_impl(mut input: syn::ItemEnum) -> Result<TokenStream, Error
         gen_never_with_variant_trait_impl(&input.ident, &replaced_variants)?;
     let without_trait_impls = gen_without_trait_impls(&input.ident, &replaced_variants)?;
     let methods_on_enum_impl = gen_methods_on_enum_impl(&input.ident, &replaced_variants)?;
-    let powerset_macro = gen_powerset_macro(&input.ident, &replaced_variants)?;
-    let powerset_macro2 = gen_powerset_macro(&ident_fix, &replaced_variants)?;
+    let powerset_macro = gen_powerset_macro(&input.ident, &input.ident, &replaced_variants)?;
+    let powerset_macro2 = gen_powerset_macro(&ident_fix, &input.ident, &replaced_variants)?;
 
     Ok(quote! {
         #input
@@ -77,7 +77,6 @@ pub fn powerset_enum_impl(mut input: syn::ItemEnum) -> Result<TokenStream, Error
         #without_trait_impls
         #methods_on_enum_impl
         #powerset_macro
-        #[allow(macro_expanded_macro_exports_accessed_by_absolute_paths)]
         #[macro_export]
         #powerset_macro2
         pub mod export {
@@ -311,13 +310,14 @@ fn gen_without_trait_impls(
 }
 
 fn gen_powerset_macro(
+    macro_ident: &syn::Ident,
     enum_ident: &syn::Ident,
     replaced_variants: &[ReplacedVariant],
 ) -> Result<TokenStream, Error> {
     let empty_powerset_generics = replaced_variants.iter().map(|_| make_never());
     let empty_powerset = quote!(#enum_ident<#(#empty_powerset_generics),*>);
     Ok(quote! {
-        macro_rules! #enum_ident {
+        macro_rules! #macro_ident {
             ($($tt:ty),*) => { powerset_enum::powerset!(#empty_powerset, $($tt),*) };
             ($($tt:ty),*,) => { powerset_enum::powerset!(#empty_powerset, $($tt),*) };
         }
