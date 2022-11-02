@@ -77,6 +77,10 @@ pub fn powerset_enum_impl(mut input: syn::ItemEnum) -> Result<TokenStream, Error
         #methods_on_enum_impl
         #powerset_macro
         #powerset_macro2
+        pub mod export {
+          use super::*;
+          pub use #ident_fix;
+        }
     })
 }
 
