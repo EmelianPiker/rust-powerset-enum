@@ -77,6 +77,7 @@ pub fn powerset_enum_impl(mut input: syn::ItemEnum) -> Result<TokenStream, Error
         #without_trait_impls
         #methods_on_enum_impl
         #powerset_macro
+        #[allow(macro_expanded_macro_exports_accessed_by_absolute_paths)]
         #[macro_export]
         #powerset_macro2
         pub mod export {
