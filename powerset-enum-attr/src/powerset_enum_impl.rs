@@ -77,6 +77,7 @@ pub fn powerset_enum_impl(mut input: syn::ItemEnum) -> Result<TokenStream, Error
         #without_trait_impls
         #methods_on_enum_impl
         #powerset_macro
+        #[macro_export]
         #powerset_macro2
         pub mod export {
           use super::*;
@@ -315,7 +316,6 @@ fn gen_powerset_macro(
     let empty_powerset_generics = replaced_variants.iter().map(|_| make_never());
     let empty_powerset = quote!(#enum_ident<#(#empty_powerset_generics),*>);
     Ok(quote! {
-        #[macro_export]
         macro_rules! #enum_ident {
             ($($tt:ty),*) => { powerset_enum::powerset!(#empty_powerset, $($tt),*) };
             ($($tt:ty),*,) => { powerset_enum::powerset!(#empty_powerset, $($tt),*) };
