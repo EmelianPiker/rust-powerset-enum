@@ -1,4 +1,4 @@
-use proc_macro2::TokenStream;
+use proc_macro2::{TokenStream,Span};
 
 use quote::quote;
 use syn::parse::Error;
@@ -12,7 +12,8 @@ pub fn powerset_enum_impl(mut input: syn::ItemEnum) -> Result<TokenStream, Error
         ));
     }
 
-    let ident_fix = Ident::new(&( "_".to_owned() + &input.ident.to_string() ), input.ident.span());
+    //let ident_fix = Ident::new(&( "_".to_owned() + &input.ident.to_string() ), input.ident.span());
+    let ident_fix = Ident::new(&( "_".to_owned() + &input.ident.to_string() ), Span::call_site());
 
     let mut replaced_variants = Vec::new();
 
